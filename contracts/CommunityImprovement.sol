@@ -1,11 +1,11 @@
 pragma solidity >=0.4.21 <0.6.0;
 
+import "openzeppelin-solidity/contracts/access/roles/WhitelistAdminRole.sol";
+import "openzeppelin-solidity/contracts/access/roles/WhitelistedRole.sol";
 
-contract CommunityImprovement {
+contract CommunityImprovement is WhitelistAdminRole, WhitelistedRole  {
 
 	// Attributes
-	address[] private whitelist;
-	address admin ;
 	enum Phase {one, two, three} // enum
 	
 	struct Proposal{
@@ -16,30 +16,9 @@ contract CommunityImprovement {
 	Proposal[] public proposals;
 	
 	
-	
 	// Methods
 	constructor() public {
-		admin = msg.sender;
-	}
-	
-	modifier onlyAdmin() {
-        if (msg.sender == admin) _;
-    }
-	
-	modifier onlyWhitelisted() {
-		// search for address in whitelist
-		// if exists in whitelist _;
-		_;
-	}
-	
-	
-	function givePermission(address citizen) public onlyAdmin{
-		whitelist.push(citizen);
-	}
-	
-	function getWhitelist(uint256 index) public view returns (address) {
-	// Check arraybounds
-		return whitelist[index];
+		
 	}
 	
 	function addProposal(string memory name, string memory description) public onlyWhitelisted{
