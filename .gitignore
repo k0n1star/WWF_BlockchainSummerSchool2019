@@ -1,3 +1,5 @@
 
 *.json
 *.json
+build/contracts/CommunityImprovement.json
+build/contracts/Migrations.json
