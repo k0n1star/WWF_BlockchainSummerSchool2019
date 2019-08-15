@@ -6,6 +6,13 @@ import "openzeppelin-solidity/contracts/access/roles/WhitelistedRole.sol";
 contract CommunityImprovement is WhitelistAdminRole, WhitelistedRole  {
 
 	// Attributes
+	bool lotteryActive;
+	uint256 lotteryDraftEarliestExecution;
+	uint256 lotteryDraftLatestExecution;
+	
+	bool communitySizeSet;
+	uint256 communitySize;
+	uint256 numberOfWhitelisted;
 	enum Phase {one, two, three} // enum
 	
 	struct Proposal{
@@ -18,7 +25,9 @@ contract CommunityImprovement is WhitelistAdminRole, WhitelistedRole  {
 	
 	// Methods
 	constructor() public {
-		
+		lotteryActive = false;
+		numberOfWhitelisted = 0;
+		communitySizeSet = false;
 	}
 	
 	function addProposal(string memory name, string memory description) public onlyWhitelisted{
@@ -30,5 +39,47 @@ contract CommunityImprovement is WhitelistAdminRole, WhitelistedRole  {
 		//Proposal memory newProposal = proposals[index];
 		return proposals[index].name;
 	}
+	
+	function addWhitelisted(address account) public onlyWhitelistAdmin {
+        super.addWhitelisted(account);
+		numberOfWhitelisted++;
+    }
+	
+	function setCommunitySize(uint256 size) public onlyWhitelistAdmin returns (bool) {
+		if (!communitySizeSet){
+			communitySizeSet = true;
+			communitySize = size;
+			return true;
+		}
+		return false;
+	}
+	
+	function getNumberOfWhitelisted() public view returns (uint256) {
+		return numberOfWhitelisted;
+	}
+	
+	// this function should probably be combined with uploading the funds for the lottery
+	function setLotteryTimeframe(uint256 start, uint256 end) public onlyWhitelistAdmin returns (bool){
+		if (!lotteryActive){
+			lotteryDraftEarliestExecution = start;
+			lotteryDraftLatestExecution = end;
+			lotteryActive = true;
+			return true;
+		}
+		return false;
+	}
+	
+	function currentTime() public view returns (uint256){
+		return now;
+	}
+	
+	function lotteryDraft () public view onlyWhitelistAdmin returns (string memory){
+		if (lotteryActive && now > lotteryDraftEarliestExecution && numberOfWhitelisted > (communitySize/2) ){
+			return 'Lottery can be drafted';
+		}else{
+			return 'lottery draft is not possible';
+		}
+	}
+	
 	
 }
