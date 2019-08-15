@@ -40,6 +40,7 @@ contract CommunityImprovement is WhitelistAdminRole, WhitelistedRole  {
 		return proposals[index].name;
 	}
 	
+<<<<<<< HEAD
 	function addWhitelisted(address account) public onlyWhitelistAdmin {
         super.addWhitelisted(account);
 		numberOfWhitelisted++;
@@ -83,3 +84,29 @@ contract CommunityImprovement is WhitelistAdminRole, WhitelistedRole  {
 	
 	
 }
+=======
+	function lotteryDraft(uint32 index) public view returns (string memory){
+		//Proposal memory newProposal = proposals[index];
+		return proposals[index].name;
+	}
+	function sayHello() public view returns(uint256){
+        return(now);
+    }
+
+	uint nonce; 
+	uint256 randnum;
+
+	function random() public {
+    uint256 randomnumber = uint256(keccak256(abi.encodePacked(now, msg.sender, nonce))) % 100;
+    randomnumber = randomnumber + 0;
+    nonce++;
+
+    randnum = randomnumber;
+	}
+
+	function getRandom() public view returns (uint256) {
+		return randnum;
+	}
+}
+
+>>>>>>> 6f96adc74cb425e55073f43f9937e0dc192ee271
