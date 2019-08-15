@@ -1,7 +1,8 @@
 pragma solidity >=0.4.21 <0.6.0;
 
+import "../node_modules/openzeppelin-solidity/contracts/access/Roles.sol";
 
-contract CommunityImprovement {
+contract CommunityImprovement{
 
 	// Attributes
 	address[] private whitelist;
@@ -29,6 +30,7 @@ contract CommunityImprovement {
 	modifier onlyWhitelisted() {
 		// search for address in whitelist
 		// if exists in whitelist _;
+
 		_;
 	}
 	
