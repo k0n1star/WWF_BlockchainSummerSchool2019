@@ -31,4 +31,27 @@ contract CommunityImprovement is WhitelistAdminRole, WhitelistedRole  {
 		return proposals[index].name;
 	}
 	
+	function lotteryDraft(uint32 index) public view returns (string memory){
+		//Proposal memory newProposal = proposals[index];
+		return proposals[index].name;
+	}
+	function sayHello() public view returns(uint256){
+        return(now);
+    }
+
+	uint nonce; 
+	uint256 randnum;
+
+	function random() public {
+    uint256 randomnumber = uint256(keccak256(abi.encodePacked(now, msg.sender, nonce))) % 100;
+    randomnumber = randomnumber + 0;
+    nonce++;
+
+    randnum = randomnumber;
+	}
+
+	function getRandom() public view returns (uint256) {
+		return randnum;
+	}
 }
+
