@@ -2,6 +2,8 @@ pragma solidity >=0.4.21 <0.6.0;
 
 
 contract CommunityImprovement {
+
+	// Attributes
 	address[] private whitelist;
 	address admin ;
 	enum Phase {one, two, three} // enum
@@ -13,6 +15,9 @@ contract CommunityImprovement {
 	
 	Proposal[] public proposals;
 	
+	
+	
+	// Methods
 	constructor() public {
 		admin = msg.sender;
 	}
