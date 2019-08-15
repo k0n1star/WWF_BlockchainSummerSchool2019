@@ -9,6 +9,10 @@ contract CommunityImprovement is WhitelistAdminRole, WhitelistedRole  {
 	bool lotteryActive;
 	uint256 lotteryDraftEarliestExecution;
 	uint256 lotteryDraftLatestExecution;
+	uint nonce; 
+	uint256 randnum;
+	address[] whitelist;
+	address lotteryWinner;
 	
 	bool communitySizeSet;
 	uint256 communitySize;
@@ -40,9 +44,9 @@ contract CommunityImprovement is WhitelistAdminRole, WhitelistedRole  {
 		return proposals[index].name;
 	}
 	
-<<<<<<< HEAD
 	function addWhitelisted(address account) public onlyWhitelistAdmin {
         super.addWhitelisted(account);
+		whitelist.push(account);
 		numberOfWhitelisted++;
     }
 	
@@ -74,34 +78,25 @@ contract CommunityImprovement is WhitelistAdminRole, WhitelistedRole  {
 		return now;
 	}
 	
-	function lotteryDraft () public view onlyWhitelistAdmin returns (string memory){
+	function lotteryDraft () public onlyWhitelistAdmin returns (bool){
 		if (lotteryActive && now > lotteryDraftEarliestExecution && numberOfWhitelisted > (communitySize/2) ){
-			return 'Lottery can be drafted';
+			random(0,numberOfWhitelisted);
+			lotteryWinner = whitelist[randnum];
+			return true;
 		}else{
-			return 'lottery draft is not possible';
+			return false;
 		}
 	}
 	
-	
-}
-=======
-	function lotteryDraft(uint32 index) public view returns (string memory){
-		//Proposal memory newProposal = proposals[index];
-		return proposals[index].name;
+	function winner () public view returns (address){
+		return lotteryWinner;
 	}
-	function sayHello() public view returns(uint256){
-        return(now);
-    }
-
-	uint nonce; 
-	uint256 randnum;
-
-	function random() public {
-    uint256 randomnumber = uint256(keccak256(abi.encodePacked(now, msg.sender, nonce))) % 100;
-    randomnumber = randomnumber + 0;
-    nonce++;
-
-    randnum = randomnumber;
+	
+	function random(uint256 lowerBound, uint256 upperBound) public returns (uint256){
+		uint256 randomnumber = uint256(keccak256(abi.encodePacked(now, msg.sender, nonce))) % (upperBound - lowerBound);
+		randomnumber = randomnumber + lowerBound;
+		nonce++;
+		randnum =  randomnumber;
 	}
 
 	function getRandom() public view returns (uint256) {
@@ -109,4 +104,3 @@ contract CommunityImprovement is WhitelistAdminRole, WhitelistedRole  {
 	}
 }
 
->>>>>>> 6f96adc74cb425e55073f43f9937e0dc192ee271
